@@ -13,6 +13,7 @@ import zipfile
 app = Flask(__name__)
 
 sf_connection = None
+empty_columns_results_storage = []
 
 # Setup for file uploads
 UPLOAD_FOLDER = 'uploads'
@@ -209,6 +210,7 @@ def map_fields():
 
 def find_empty_columns_in_csv(folder_path):
     csv.field_size_limit(2147483647)  # Setting a large field size limit
+    results = []
     for filename in os.listdir(folder_path):
         if filename.endswith(".csv"):
             file_path = os.path.join(folder_path, filename)
@@ -220,6 +222,7 @@ def find_empty_columns_in_csv(folder_path):
                 reader = csv.reader(csvfile)
                 header = next(reader, None)  # Read the header row
                 if header is None:
+                    results.append({'filename': filename, 'empty_columns': []})
                     continue
 
                 # Initialize a dictionary to track if a column is empty
@@ -233,23 +236,35 @@ def find_empty_columns_in_csv(folder_path):
                 # Filter out columns that are not empty
                 empty_columns = [column_name for column_name, is_empty in empty_columns.items() if is_empty]
 
-                if empty_columns:
-                    with open(f"{filename}_empty_columns.txt", "a", encoding='utf-8') as f:
-                        f.write(f"Empty Columns: {', '.join(empty_columns)}\n")
+                results.append({'filename': filename, 'empty_columns': empty_columns})
+    return results
     
 @app.route('/find_empty_columns', methods=['GET', 'POST'])
 def find_empty_columns():
+    global empty_columns_results_storage
     if request.method == 'POST':
         folder_path = request.form['folder_path']
-        # Assuming folder_path is a path on the server where the files are stored.
-        # You might need to adjust this logic depending on how your application is deployed.
         try:
-            find_empty_columns_in_csv(folder_path)
-            return "Empty columns analysis completed."
+            results = find_empty_columns_in_csv(folder_path)
+            empty_columns_results_storage = results
+            return render_template('empty_columns_results.html', results=results)
         except Exception as e:
             return f"An error occurred: {str(e)}"
     else:
         return render_template('empty_columns_form.html')
+
+@app.route('/download_empty_columns_csv')
+def download_empty_columns_csv():
+    if not empty_columns_results_storage:
+        return "No results to download."
+    memory_file = io.BytesIO()
+    with zipfile.ZipFile(memory_file, 'w', zipfile.ZIP_DEFLATED) as zf:
+        for result in empty_columns_results_storage:
+            df = pd.DataFrame({'Empty Columns': result['empty_columns']})
+            csv_data = df.to_csv(index=False)
+            zf.writestr(f"{result['filename']}_empty_columns.csv", csv_data)
+    memory_file.seek(0)
+    return send_file(memory_file, as_attachment=True, download_name='empty_columns.zip', mimetype='application/zip')
 
 @app.route('/salesforce_login', methods=['GET', 'POST'])
 def salesforce_login():
