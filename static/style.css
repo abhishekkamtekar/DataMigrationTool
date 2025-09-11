@@ -1,9 +1,12 @@
 
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap');
+
 body {
-    font-family: 'Arial', sans-serif;
+    font-family: 'Roboto', sans-serif;
     margin: 0;
     padding: 0;
-    background-color: #f4f4f4;
+    background-color: #f0f2f5;
+    color: #333;
 }
 
 .container {
@@ -15,11 +18,12 @@ body {
 }
 
 header, .footer {
-    background: #333;
+    background: linear-gradient(90deg, #0062E6, #33AEFF);
     color: #fff;
     padding-top: 20px;
     padding-bottom: 20px;
     text-align: center;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 
 header h1, .footer p {
@@ -28,19 +32,32 @@ header h1, .footer p {
 
 input[type="text"], input[type="password"], input[type="file"], input[type="submit"], select {
     width: 100%;
-    padding: 10px;
+    padding: 12px;
     margin-top: 10px;
     margin-bottom: 20px;
     display: inline-block;
     border: 1px solid #ccc;
-    border-radius: 4px;
+    border-radius: 6px;
     box-sizing: border-box;
+    transition: border-color 0.3s ease;
+}
+
+input[type="text"]:focus,
+input[type="password"]:focus,
+input[type="file"]:focus,
+select:focus {
+    border-color: #007bff;
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(0,123,255,0.2);
 }
 
 input[type="submit"] {
     background-color: #4CAF50;
     color: white;
     cursor: pointer;
+    border: none;
+    border-radius: 6px;
+    transition: background-color 0.3s ease;
 }
 
 input[type="submit"]:hover {
@@ -57,9 +74,10 @@ input[type="submit"]:hover {
     padding: 10px 20px;
     margin: 5px;
     border: none;
-    border-radius: 4px;
+    border-radius: 6px;
     cursor: pointer;
     display: inline-block;
+    transition: background-color 0.3s ease;
 }
 
 .action-button:hover, .export-button:hover {
@@ -74,9 +92,16 @@ input[type="submit"]:hover {
 .objects-list {
     background: #fff;
     padding: 20px;
-    border-radius: 4px;
+    border-radius: 8px;
     margin-top: 20px;
     box-shadow: 0 2px 4px rgba(0,0,0,.1);
+}
+
+form {
+    background: #fff;
+    padding: 2rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 
 @media (max-width: 768px) {
@@ -88,6 +113,10 @@ input[type="submit"]:hover {
     header, .footer {
         padding-top: 10px;
         padding-bottom: 10px;
+    }
+
+    form {
+        padding: 1rem;
     }
 }
 
