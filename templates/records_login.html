@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login to Salesforce</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>Salesforce Records Export</h1>
+        </div>
+    </header>
+    <div class="container">
+        <form action="/export_records_login" method="post">
+            <div class="form-group">
+                <label for="username">Username:</label>
+                <input type="text" id="username" name="username" required>
+            </div>
+            <div class="form-group">
+                <label for="password">Password:</label>
+                <input type="password" id="password" name="password" required>
+            </div>
+            <div class="form-group">
+                <label for="token">Security Token:</label>
+                <input type="text" id="token" name="token" required>
+            </div>
+            <input type="submit" value="Login">
+        </form>
+    </div>
+    <div class="footer">
+        <p>Created by: abhishek.s.k</p>
+    </div>
+</body>
+</html>

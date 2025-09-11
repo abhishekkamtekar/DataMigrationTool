@@ -7,6 +7,8 @@ import os
 import csv
 import random
 from werkzeug.utils import secure_filename
+import io
+import zipfile
 
 app = Flask(__name__)
 
@@ -37,6 +39,22 @@ def login():
             return f"Failed to authenticate: {str(e)}"
     else:
         return render_template('index.html')
+
+@app.route('/export_records_login', methods=['GET', 'POST'])
+def export_records_login():
+    if request.method == 'POST':
+        username = request.form['username']
+        password = request.form['password']
+        security_token = request.form['token']
+        try:
+            global sf_connection
+            sf_connection = Salesforce(username=username, password=password, security_token=security_token, domain='login')
+            all_objects = sf_connection.describe()['sobjects']
+            return render_template('select_records.html', all_objects=all_objects)
+        except Exception as e:
+            return f"Failed to authenticate: {str(e)}"
+    else:
+        return render_template('records_login.html')
 
 @app.route('/export', methods=['POST'])
 def export_objects():
@@ -98,6 +116,25 @@ def export_objects():
             final_df.to_excel(writer, sheet_name=sheet_name, index=False)
 
     return send_file(excel_file, as_attachment=True, download_name='salesforce_objects.xlsx')
+
+
+@app.route('/export_records', methods=['POST'])
+def export_records():
+    selected_objects = request.form.getlist('objects')
+    zip_buffer = io.BytesIO()
+    with zipfile.ZipFile(zip_buffer, 'w', zipfile.ZIP_DEFLATED) as zf:
+        for obj_name in selected_objects:
+            fields_info = getattr(sf_connection, obj_name).describe()['fields']
+            field_names = [f['name'] for f in fields_info]
+            query = f"SELECT {', '.join(field_names)} FROM {obj_name}"
+            records = sf_connection.query_all(query)
+            df = pd.DataFrame(records['records'])
+            if 'attributes' in df.columns:
+                df = df.drop(columns='attributes')
+            csv_data = df.to_csv(index=False)
+            zf.writestr(f"{obj_name}.csv", csv_data)
+    zip_buffer.seek(0)
+    return send_file(zip_buffer, as_attachment=True, download_name='object_records.zip', mimetype='application/zip')
 
 
 @app.route('/map_fields', methods=['GET', 'POST'])
