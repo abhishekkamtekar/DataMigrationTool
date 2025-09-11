@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Duplicate Columns Results</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container mt-5">
+        <h1>Duplicate Columns Analysis Results</h1>
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>Filename</th>
+                    <th>Duplicate Columns</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for result in results %}
+                <tr>
+                    <td>{{ result.filename }}</td>
+                    <td>
+                        {% if result.duplicate_columns %}
+                            {% for pair in result.duplicate_columns %}
+                                {{ pair[0] }} = {{ pair[1] }}{% if not loop.last %}, {% endif %}
+                            {% endfor %}
+                        {% else %}
+                            None
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <a href="{{ url_for('download_duplicate_columns_csv') }}" class="btn btn-primary">Download Results</a>
+        <a href="/find_duplicate_columns" class="btn btn-secondary">Analyze Another Folder</a>
+    </div>
+</body>
+</html>
