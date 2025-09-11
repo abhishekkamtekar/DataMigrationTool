@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Validation Results</title>
+</head>
+<body>
+    <h1>Validation Results</h1>
+    
+    <section>
+        <h2>Record Count Check</h2>
+        <p>{{ record_count_result }}</p>
+    </section>
+
+    <section>
+        <h2>Random Record Check</h2>
+        {% if random_check_result %}
+            {% if random_check_result is string %}
+                <p>{{ random_check_result }}</p>
+            {% else %}
+                <h3>Matched Columns:</h3>
+                <ul>
+                    {% for column in random_check_result.matched_columns %}
+                        <li>{{ column }}</li>
+                    {% endfor %}
+                </ul>
+                <h3>Unmatched Columns:</h3>
+                <ul>
+                    {% for column in random_check_result.unmatched_columns %}
+                        <li>{{ column }}</li>
+                    {% endfor %}
+                </ul>
+                {% if random_check_result.get('random_record_data') %}
+                <h3>Random Record Data (File 1):</h3>
+                <ul>
+                    {% for key, value in random_check_result['random_record_data'].items() %}
+                        <li>{{ key }}: {{ value }}</li>
+                    {% endfor %}
+                </ul>
+                {% endif %}
+                {% if random_check_result.get('matching_record_data') %}
+                <h3>Matching Record Data (File 2):</h3>
+                <ul>
+                    {% for key, value in random_check_result['matching_record_data'].items() %}
+                        <li>{{ key }}: {{ value }}</li>
+                    {% endfor %}
+                </ul>
+                {% endif %}
+            {% endif %}
+        {% else %}
+            <p>No random check result available.</p>
+        {% endif %}
+    </section>
+
+    <section>
+        <h2>Column Records Comparison</h2>
+        <h3>Matched Columns:</h3>
+        <table border="1">
+            <tr>
+                <th>Column Name</th>
+                <th>Number of Records</th>
+            </tr>
+            {% for column in matched_columns %}
+            <tr>
+                <td>{{ column }}</td>
+                <td></td> <!-- Assuming count is not directly available; adjust as needed -->
+            </tr>
+            {% endfor %}
+        </table>
+        
+        <h3>Unmatched Columns:</h3>
+        <table border="1">
+            <tr>
+                <th>Column Name</th>
+                <th>Records in File 1</th>
+                <th>Records in File 2</th>
+            </tr>
+            {% for column in unmatched_columns %}
+            <tr>
+                <td>{{ column }}</td>
+                <td></td> <!-- Assuming count is not directly available for unmatched columns; adjust as needed -->
+                <td></td>
+            </tr>
+            {% endfor %}
+        </table>
+    </section>
+
+</body>
+</html>

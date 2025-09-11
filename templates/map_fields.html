@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Map Fields</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>Map Fields</h1>
+        </div>
+    </header>
+    <div class="container">
+        <form action="/map_fields" method="post" enctype="multipart/form-data">
+
+            <div class="form-group">
+                <label for="file1">Upload File 1:</label>
+                <input type="file" id="file1" name="file1" required>
+            </div>
+            <div class="form-group">
+                <label for="file2">Upload File 2:</label>
+                <input type="file" id="file2" name="file2" required>
+            </div>
+            <div class="form-group">
+                <label for="row1">Row Name for File 1:</label>
+                <input type="text" id="row1" name="row1" value="1GP Fields" required>
+            </div>
+            <div class="form-group">
+                <label for="row2">Row Name for File 2:</label>
+                <input type="text" id="row2" name="row2" value="2GP Fields" required>
+            </div>
+            <input type="submit" value="Compare and Map Fields" class="export-button">
+        </form>
+    </div>
+    <div class="footer">
+        <p>Created by: abhishek.s.k</p>
+    </div>
+</body>
+</html>

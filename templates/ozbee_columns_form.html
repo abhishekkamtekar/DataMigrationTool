@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Check Ozbee Columns</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container mt-5">
+        <h1>Check Ozbee Columns in Files</h1>
+        <form action="/check_ozbee_columns" method="post">
+            <div class="form-group">
+                <label for="folder_path">Folder Path</label>
+                <input type="text" class="form-control" id="folder_path" name="folder_path" placeholder="Enter the folder path" required>
+            </div>
+            <button type="submit" class="btn btn-primary">Check Files</button>
+        </form>
+    </div>
+</body>
+</html>

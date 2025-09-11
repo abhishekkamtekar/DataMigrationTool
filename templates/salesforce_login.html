@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Salesforce Login</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+<div class="container">
+    <header>
+        <h1>Login to Salesforce</h1>
+    </header>
+    <form action="/salesforce_login" method="post">
+        <label for="username">Username:</label>
+        <input type="text" id="username" name="username" required>
+
+        <label for="password">Password:</label>
+        <input type="password" id="password" name="password" required>
+
+        <label for="token">Security Token:</label>
+        <input type="text" id="token" name="token" required>
+
+        <button type="submit">Login and Analyze</button>
+    </form>
+</div>
+</body>
+</html>

@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Ozbee Columns Results</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container mt-5">
+        <h1>Ozbee Columns Check Results</h1>
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>Filename</th>
+                    <th>Has Ozbee Fields</th>
+                    <th>Contains Data in Ozbee Fields</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for result in results %}
+                <tr>
+                    <td>{{ result.filename }}</td>
+                    <td>{{ result.has_ozbee_column }}</td>
+                    <td>{{ result.contains_data }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <a href="/check_ozbee_columns" class="btn btn-secondary">Check Another Folder</a>
+    </div>
+</body>
+</html>

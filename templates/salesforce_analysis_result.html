@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Salesforce Analysis Result</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+<div class="container">
+    <header>
+        <h1>Salesforce Analysis Result</h1>
+    </header>
+    <div>
+        <p>Number of objects with at least one record: {{ objects_with_records }}</p>
+        <a href="/">Go Back to Home</a>
+    </div>
+</div>
+</body>
+</html>

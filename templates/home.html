@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Home - Salesforce Data Tool</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='home.css') }}">
+</head>
+<body>
+<div class="overlay"></div>
+<div class="container">
+    <header>
+        <h1>Welcome to the Salesforce Data Extraction Tool</h1>
+    </header>
+    <div>
+        <a href="/login" class="action-button">Extract Objects and Fields</a>
+        <a href="/map_fields" class="action-button">Map Fields</a>
+        <a href="/salesforce_login" class="action-button">Find out Number Of Objects with records</a>
+        <a href="/find_empty_columns" class="action-button">Find Unused Fields</a>
+        <a href="/validate_data" class="action-button">Validate Data</a>
+        <a href="/check_ozbee_columns" class="action-button">Check Ozbee Fields Data</a>
+    </div>
+</div>
+</body>
+</html>

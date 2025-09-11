@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Data Validation</title>
+</head>
+<body>
+    <h1>Data Validation</h1>
+    <form action="/validate_data" method="post" enctype="multipart/form-data">
+        <label for="file1">Upload File 1:</label>
+        <input type="file" id="file1" name="file1" required><br><br>
+        <label for="file2">Upload File 2:</label>
+        <input type="file" id="file2" name="file2" required><br><br>
+        <label for="column_name1">Column Name in File 1 (for random check):</label>
+        <input type="text" id="column_name1" name="column_name1" required><br><br>
+        <label for="column_name2">Column Name in File 2 (for random check):</label>
+        <input type="text" id="column_name2" name="column_name2" required><br><br>
+        <input type="submit" value="Validate">
+    </form>
+</body>
+</html>

@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Find Empty Columns in CSV</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+<div class="container">
+    <header>
+        <h1>CSV Empty Columns Finder</h1>
+    </header>
+    <form action="/find_empty_columns" method="post" enctype="multipart/form-data">
+        <label for="folderPath">Enter Folder Path:</label>
+        <input type="text" id="folderPath" name="folder_path" required>
+        <button type="submit">Analyze CSV Files</button>
+    </form>
+</div>
+</body>
+</html>
