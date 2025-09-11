@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Empty Columns Results</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container mt-5">
+        <h1>Empty Columns Analysis Results</h1>
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>Filename</th>
+                    <th>Empty Columns</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for result in results %}
+                <tr>
+                    <td>{{ result.filename }}</td>
+                    <td>{{ result.empty_columns | join(', ') if result.empty_columns else 'None' }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <a href="{{ url_for('download_empty_columns_csv') }}" class="btn btn-primary">Download Results</a>
+        <a href="/find_empty_columns" class="btn btn-secondary">Analyze Another Folder</a>
+    </div>
+</body>
+</html>
