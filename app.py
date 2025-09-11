@@ -211,15 +211,20 @@ def find_empty_columns_in_csv(folder_path):
     csv.field_size_limit(2147483647)  # Setting a large field size limit
     for filename in os.listdir(folder_path):
         if filename.endswith(".csv"):
-            with open(os.path.join(folder_path, filename), newline='') as csvfile:
+            file_path = os.path.join(folder_path, filename)
+            try:
+                csvfile = open(file_path, newline='', encoding='utf-8')
+            except UnicodeDecodeError:
+                csvfile = open(file_path, newline='', encoding='latin-1')
+            with csvfile:
                 reader = csv.reader(csvfile)
                 header = next(reader, None)  # Read the header row
                 if header is None:
                     continue
-                
+
                 # Initialize a dictionary to track if a column is empty
                 empty_columns = {column_name: True for column_name in header}
-                
+
                 for row in reader:
                     for column_name, cell in zip(header, row):
                         if cell.strip() != '':
@@ -227,9 +232,9 @@ def find_empty_columns_in_csv(folder_path):
 
                 # Filter out columns that are not empty
                 empty_columns = [column_name for column_name, is_empty in empty_columns.items() if is_empty]
-                
+
                 if empty_columns:
-                    with open(f"{filename}_empty_columns.txt", "a") as f:
+                    with open(f"{filename}_empty_columns.txt", "a", encoding='utf-8') as f:
                         f.write(f"Empty Columns: {', '.join(empty_columns)}\n")
     
 @app.route('/find_empty_columns', methods=['GET', 'POST'])
