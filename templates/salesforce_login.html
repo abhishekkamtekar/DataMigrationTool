@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Salesforce Login</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
@@ -10,15 +11,15 @@
     <header>
         <h1>Login to Salesforce</h1>
     </header>
-    <form action="/salesforce_login" method="post">
+    <form action="/salesforce_login" method="post" autocomplete="off">
         <label for="username">Username:</label>
-        <input type="text" id="username" name="username" required>
+        <input type="text" id="username" name="username" required autocomplete="off">
 
         <label for="password">Password:</label>
-        <input type="password" id="password" name="password" required>
+        <input type="password" id="password" name="password" required autocomplete="new-password">
 
         <label for="token">Security Token:</label>
-        <input type="text" id="token" name="token" required>
+        <input type="text" id="token" name="token" required autocomplete="off">
         <label for="environment">Environment:</label>
         <select id="environment" name="environment">
             <option value="login">Production</option>
