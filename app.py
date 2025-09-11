@@ -29,10 +29,11 @@ def login():
         username = request.form['username']
         password = request.form['password']
         security_token = request.form['token']
-        
+        domain = request.form.get('environment', 'login')
+
         try:
             global sf_connection
-            sf_connection = Salesforce(username=username, password=password, security_token=security_token, domain='login')
+            sf_connection = Salesforce(username=username, password=password, security_token=security_token, domain=domain)
             all_objects = sf_connection.describe()['sobjects']
             return render_template('select_objects.html', all_objects=all_objects)
         except Exception as e:
@@ -46,9 +47,10 @@ def export_records_login():
         username = request.form['username']
         password = request.form['password']
         security_token = request.form['token']
+        domain = request.form.get('environment', 'login')
         try:
             global sf_connection
-            sf_connection = Salesforce(username=username, password=password, security_token=security_token, domain='login')
+            sf_connection = Salesforce(username=username, password=password, security_token=security_token, domain=domain)
             all_objects = sf_connection.describe()['sobjects']
             return render_template('select_records.html', all_objects=all_objects)
         except Exception as e:
@@ -250,7 +252,7 @@ def salesforce_login():
         username = request.form['username']
         password = request.form['password']
         token = request.form['token']
-        domain = 'test'  # Adjust this as necessary; could also be made a part of the form
+        domain = request.form.get('environment', 'login')
         try:
             sf = Salesforce(username=username, password=password, security_token=token, domain=domain)
             object_names = [obj["name"] for obj in sf.describe()["sobjects"]]
