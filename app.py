@@ -15,6 +15,7 @@ app = Flask(__name__)
 sf_connection = None
 empty_columns_results_storage = []
 duplicate_columns_results_storage = []
+duplicate_records_results_storage = []
 
 # Setup for file uploads
 UPLOAD_FOLDER = 'uploads'
@@ -262,6 +263,25 @@ def find_duplicate_columns_in_csv(folder_path):
 
             results.append({'filename': filename, 'duplicate_columns': duplicates})
     return results
+
+
+def find_duplicate_records_in_csv(folder_path):
+    results = []
+    for filename in os.listdir(folder_path):
+        if filename.endswith(".csv"):
+            file_path = os.path.join(folder_path, filename)
+            try:
+                df = pd.read_csv(file_path, dtype=str)
+            except UnicodeDecodeError:
+                df = pd.read_csv(file_path, dtype=str, encoding='latin-1')
+
+            duplicate_rows = df[df.duplicated(keep=False)]
+            results.append({
+                'filename': filename,
+                'duplicates': duplicate_rows.to_dict(orient='records'),
+                'columns': list(df.columns)
+            })
+    return results
     
 @app.route('/find_empty_columns', methods=['GET', 'POST'])
 def find_empty_columns():
@@ -318,6 +338,35 @@ def download_duplicate_columns_csv():
             zf.writestr(f"{result['filename']}_duplicate_columns.csv", csv_data)
     memory_file.seek(0)
     return send_file(memory_file, as_attachment=True, download_name='duplicate_columns.zip', mimetype='application/zip')
+
+
+@app.route('/find_duplicate_records', methods=['GET', 'POST'])
+def find_duplicate_records():
+    global duplicate_records_results_storage
+    if request.method == 'POST':
+        folder_path = request.form['folder_path']
+        try:
+            results = find_duplicate_records_in_csv(folder_path)
+            duplicate_records_results_storage = results
+            return render_template('duplicate_records_results.html', results=results)
+        except Exception as e:
+            return f"An error occurred: {str(e)}"
+    else:
+        return render_template('duplicate_records_form.html')
+
+
+@app.route('/download_duplicate_records_csv')
+def download_duplicate_records_csv():
+    if not duplicate_records_results_storage:
+        return "No results to download."
+    memory_file = io.BytesIO()
+    with zipfile.ZipFile(memory_file, 'w', zipfile.ZIP_DEFLATED) as zf:
+        for result in duplicate_records_results_storage:
+            df = pd.DataFrame(result['duplicates'], columns=result['columns'])
+            csv_data = df.to_csv(index=False)
+            zf.writestr(f"{result['filename']}_duplicate_records.csv", csv_data)
+    memory_file.seek(0)
+    return send_file(memory_file, as_attachment=True, download_name='duplicate_records.zip', mimetype='application/zip')
 
 @app.route('/salesforce_login', methods=['GET', 'POST'])
 def salesforce_login():
