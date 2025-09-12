@@ -2,15 +2,15 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Find Duplicate Columns in CSV</title>
+    <title>Find Duplicate Fields in CSV</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
 <div class="container">
     <header>
-        <h1>CSV Duplicate Columns Finder</h1>
+        <h1>CSV Duplicate Fields Finder</h1>
     </header>
-    <form action="/find_duplicate_columns" method="post" enctype="multipart/form-data">
+    <form action="/find_duplicate_fields" method="post" enctype="multipart/form-data">
         <label for="folderPath">Enter Folder Path:</label>
         <input type="text" id="folderPath" name="folder_path" required>
         <button type="submit">Analyze CSV Files</button>
