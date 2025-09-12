@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Duplicate Records Results</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container mt-5">
+        <h1>Duplicate Records Analysis Results</h1>
+        {% for result in results %}
+            <h3>{{ result.filename }}</h3>
+            {% if result.duplicates %}
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            {% for col in result.columns %}
+                                <th>{{ col }}</th>
+                            {% endfor %}
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for row in result.duplicates %}
+                            <tr>
+                                {% for col in result.columns %}
+                                    <td>{{ row[col] }}</td>
+                                {% endfor %}
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            {% else %}
+                <p>No duplicate records found.</p>
+            {% endif %}
+        {% endfor %}
+        <a href="{{ url_for('download_duplicate_records_csv') }}" class="btn btn-primary">Download Results</a>
+        <a href="/find_duplicate_records" class="btn btn-secondary">Analyze Another Folder</a>
+    </div>
+</body>
+</html>
