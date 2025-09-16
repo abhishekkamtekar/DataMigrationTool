@@ -20,6 +20,7 @@ duplicate_fields_results_storage = []
 UPLOAD_FOLDER = 'uploads'
 ALLOWED_EXTENSIONS = {'csv', 'xlsx'}
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
 
 @app.route('/')
 def home():
@@ -414,7 +415,7 @@ def check_random_record(data1, data2, column_name1, column_name2):
 
     if not matching_records:
         return "Random record matching failed."
-    
+
     # Build matched and unmatched column data
     matched_columns, unmatched_columns = [], []
     for key, value in random_record.items():
@@ -422,7 +423,12 @@ def check_random_record(data1, data2, column_name1, column_name2):
             matched_columns.append(key)
         else:
             unmatched_columns.append(key)
-    return {"matched_columns": matched_columns, "unmatched_columns": unmatched_columns}
+    return {
+        "matched_columns": matched_columns,
+        "unmatched_columns": unmatched_columns,
+        "random_record_data": random_record,
+        "matching_record_data": matching_records[0]
+    }
 
 def compare_column_records(data1, data2):
     """Compare column records between two datasets."""
@@ -472,7 +478,7 @@ def validate_data():
             print("unmatched_columns - {unmatched_columns}")
             print(unmatched_columns)
             print("\n*-------------------------------------------------------------*\n")
-            if random_check_result['unmatched_columns']:
+            if isinstance(random_check_result, dict) and random_check_result.get('unmatched_columns'):
                 print("\n*-------------------------------------------------------------*\n")
                 print("Unmatched Data:")
                 for column in random_check_result['unmatched_columns']:
