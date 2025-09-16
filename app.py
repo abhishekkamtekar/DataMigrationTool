@@ -81,7 +81,24 @@ def export_objects():
             fields = getattr(sf_connection, obj_name).describe()['fields']
             fields_df = pd.DataFrame(fields)
 
-            headers_df = pd.DataFrame(columns=['S#', '1GP Fields', '2GP Fields', 'Field API Name', 'Field Type', f'Object Name ({obj_name})'])
+            headers_df = pd.DataFrame(columns=[
+                'S#',
+                '1GP Fields',
+                '2GP Fields',
+                'Field API Name',
+                'Field Type',
+                'Field Label',
+                'Field Description',
+                f'Object Name ({obj_name})'
+            ])
+
+            field_labels = fields_df['label'] if 'label' in fields_df else pd.Series([None] * len(fields_df))
+            if 'inlineHelpText' in fields_df:
+                field_descriptions = fields_df['inlineHelpText']
+            elif 'description' in fields_df:
+                field_descriptions = fields_df['description']
+            else:
+                field_descriptions = pd.Series([None] * len(fields_df))
 
             fields_data = pd.DataFrame({
                 'S#': range(1, len(fields_df) + 1),
@@ -89,6 +106,8 @@ def export_objects():
                 '2GP Fields': [None] * len(fields_df),
                 'Field API Name': fields_df['name'],
                 'Field Type': fields_df['type'],
+                'Field Label': field_labels,
+                'Field Description': field_descriptions,
                 f'Object Name ({obj_name})': [None] * len(fields_df)
             })
 
@@ -113,7 +132,16 @@ def export_objects():
                         else:
                             final_df.loc[i, ['2GP Fields']] = [final_df.at[i, '1GP Fields']]
                     for i in df2e:
-                        new_row = {'S#': None, '1GP Fields': None, '2GP Fields': i, 'Field Type': None}
+                        new_row = {
+                            'S#': None,
+                            '1GP Fields': None,
+                            '2GP Fields': i,
+                            'Field API Name': None,
+                            'Field Type': None,
+                            'Field Label': None,
+                            'Field Description': None,
+                            f'Object Name ({obj_name})': None
+                        }
                         final_df = pd.concat([final_df, pd.DataFrame([new_row])], ignore_index=True)
 
             sheet_name = obj_name[:31] if len(obj_name) > 31 else obj_name
